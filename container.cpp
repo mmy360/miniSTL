@@ -3,7 +3,7 @@
 
 
 template <typename Derived, typename T>
-class Contianer{
+class ContainerBase{
 public:
     class Iterator{
     private:
@@ -15,7 +15,7 @@ public:
             return *ptr;
         }
 
-        Iterator &operator++{
+        Iterator &operator++(){
             ++ptr;
             return *this;
         }
@@ -25,9 +25,9 @@ public:
         }
     };
 
-    Contianer() {}
+    ContainerBase() {}
 
-    woid push_back(const T &value){
+    void push_back(const T &value){
         static_cast<Derived*>(this) -> push_back_impl(value);
     }
 
@@ -342,12 +342,12 @@ public:
 #include <stdexcept>
 
 template<typename T, size_t N>
-class MyArray : public SequentialContainer<MyArray<T, N>, T> {
+class Array : public SequentialContainer<Array<T, N>, T> {
 private:
     T data_[N];
 
 public:
-    MyArray() {}
+    Array() {}
 
     void push_back_impl(const T& value) {
         throw std::out_of_range("Cannot push_back to a fixed-size array");
@@ -367,11 +367,7 @@ public:
     }
 };
 
-#include <iostream>
-#include <cstring>
-#include <stdexcept>
-
-class MyString : public SequentialContainer<MyString, char> {
+class String : public SequentialContainer<String, char> {
 private:
     char* data_;
     size_t size_;
@@ -386,9 +382,9 @@ private:
     }
 
 public:
-    MyString() : data_(nullptr), size_(0), capacity_(0) {}
+    String() : data_(nullptr), size_(0), capacity_(0) {}
 
-    ~MyString() {
+    ~String() {
         delete[] data_;
     }
 
